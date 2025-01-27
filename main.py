@@ -31,7 +31,7 @@ This will install the packages from the requirements.txt for this project.
 
 
 app = Flask(__name__)
-app.config["SECRET_KEY"] = "8BYkEfBA6O6donzWlSihBXox7C0sKR6b"
+app.config["SECRET_KEY"] = os.environ.get("FLASK_KEY")
 ckeditor = CKEditor(app)
 Bootstrap5(app)
 
@@ -65,10 +65,9 @@ class Base(DeclarativeBase):
 
 # This finds the directory where your main program (e.g., main.py) is located.
 # basedir is essentially the folder path for your project.
+# Do 'printenv' on mac terminal to see environment list
 basedir = os.path.abspath(os.path.dirname(__file__))  # Get the directory of main.py
-app.config["SQLALCHEMY_DATABASE_URI"] = (
-    f"sqlite:///{os.path.join(basedir, 'instance', 'posts.db')}"
-)
+app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DB_URI", "sqlite:///posts.db")
 db = SQLAlchemy(model_class=Base)
 db.init_app(app)
 
